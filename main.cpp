@@ -22,7 +22,7 @@ vector<vector<long long>> buildHash2D(const vector<string>& a) {
 	vector<vector<long long>> H(n, vector<long long>(m, 0));
 
 	for(int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < m; j++) {
 			// current symbol value
 			long long val = (unsigned char)a[i][j];
 
@@ -53,7 +53,7 @@ long long getSubHash(const vector<vector<long long>>& H, const vector<long long>
 			res += MOD;
 	}
 	if (y > 0) {
-		res = (res - H[x - 1][y2] * powRow[sz]) % MOD;
+		res = (res - H[x2][y - 1] * powCol[sz]) % MOD;
 		if (res < 0)
 			res += MOD;
 	}
@@ -81,7 +81,7 @@ vector<pair<int, int>> rabinKarp2D(const vector<string>& text, const vector<stri
 
 	vector<pair<int, int>> res;
 
-	for (int i = 0; i <= n; i++) {
+	for (int i = 0; i + m <= n; i++) {
 		for (int j = 0; j + m <= n; j++) {
 			long long cur = getSubHash(Htext, powRow, powCol, i, j, m);
 			if (cur == patHash) {
@@ -103,8 +103,16 @@ vector<pair<int, int>> rabinKarp2D(const vector<string>& text, const vector<stri
 }
 
 int main() {
-	vector<string> text = { "abcde", "fghij", "klmno", "pqrst", "uvwxy" };
-	vector<string> pat = { "gh", "lm" };
+	vector<string> text = {
+		"abcde",
+		"fGHij",
+		"kLMno",
+		"psGHt",
+		"uxLMy" };
+
+	vector<string> pat = { 
+		"GH",
+		"LM" };
 
 	vector<pair<int, int>> ans = rabinKarp2D(text, pat);
 	for (int i = 0; i < (int)ans.size(); i++) {
